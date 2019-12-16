@@ -1,28 +1,30 @@
 # The Many Hats Club CTF
 The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
 
+![](writeupfiles/ctfscore.png)
+
 ## Overview
 
  Title          | Category      | Points        | Flag         |
 | ------------- | ------------- | ------------- | ------------- |
 | Shitter       | Web           | 300           |               |             
 | Hackbot       | Web           | 400 |               |
-| BoneChewerCon | Web           | 125 | ------------- |
-| Lotto-win       | Crypto        | 150           |               |             
+| BoneChewerCon | Web           | 125 |  |
+| Lotto-win       | Crypto        | 150           | TMHC{Lucki3r_th4n_Pelayo}               |             
 | matrix_madness| Crypto        | 200 |               | 
-| C4n_I_h4z_c0d3_n_crypt0 | Misc          | 100 | ------------- |
+| C4n_I_h4z_c0d3_n_crypt0 | Misc          | 100 |  |
 | DESk       | Misc          | 125           | TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}              |             
 | Beeeep_Beeeep  | Misc          | 175 | TMHC{0f5ee61ef3fbb4bb066df8c286ec84b07a7a5d95}              | 
 | flagthebox | Misc          | 400 | |
 | the bain of chiv       | Misc          | 200           |               |             
 | miniPWN  | Pwn           | 200 |               | 
-| overdosed | Pwn           | 150 | ------------- |
+| overdosed | Pwn           | 150 |  |
 | w00ter       | Pwn           | 600           |               |             
 | Operation  | Reversing     | 100 |               | 
-| DeNuevo | Reversing     | 125 | ------------- |
+| DeNuevo | Reversing     | 125 |  |
 | Quack       | Reversing     | 400           |               |             
 | QuackQuack  | Reversing         | 600 |               | 
-| WANTED  | Stego         | 425 |               | 
+| WANTED  | Stego         | 425 | TMHC{Th1sIsY0u1sntIt}               | 
 | HelpSomeoneIsTryingToBeMe  | OSINT        | 225 |               | 
 | quoted  | Mobile        | 400 |               | 
 
