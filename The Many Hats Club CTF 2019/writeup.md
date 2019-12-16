@@ -1,7 +1,7 @@
-##The Many Hats Club CTF
-
+# The Many Hats Club CTF
 The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
 
+## Overview
 
  Title          | Category      | Points        | Flag         |
 | ------------- | ------------- | ------------- | ------------- |
@@ -28,7 +28,7 @@ The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
 
 
 
-##Lotto-win
+## Lotto-win
 
 Connect to the docker with netcat to start the lottery.
 
