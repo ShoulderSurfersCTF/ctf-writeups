@@ -124,11 +124,11 @@ Bingo! We input "1587926887" as our winning number and get our prize :)
 ## DESk
 DESk was a fun challenge with a bit of Google searching and history involved.
 
-<image>
+![](writeupfiles/desk.png)
  
 The challenge info gives us almost what seems like a hint
 
-<image>
+![](writeupfiles/chall.png)
  
 unzipping the challenge gives us an image of a computer where the user is trying to login as “ken”. We also see a chestboard piece of paper just above the keyboard
 
@@ -136,47 +136,47 @@ unzipping the challenge gives us an image of a computer where the user is trying
  
 zooming in, we see a chest board where it looks like a chest move has been performed
 
-<image>
+![](writeupfiles/screenie.png)
  
 Googling the “description” of the challenge (password 39 years) gives us an article which explains how someone created an interesting password from a chest move
 https://en.chessbase.com/post/after-39-years-chess-password-cracked
 
-<image>
+![](writeupfiles/39yrs.png)
 
 in the article, we see a snippet which states the password may be: p/q2-q4!
 
-<image>
+![](writeupfiles/pq2q4.png)
 
 we try the password, but it is incorrect:
 
-<image>
+![](writeupfiles/unzip.png)
 
 we also see another interesting code snippet:
 
-<image>
+![](writeupfiles/pawnq4.png)
 
 Google image searching this gives us a chest move as an image: p = pawn
 q2 - q4 = move queen position 2 to position 4
 
-<image>
+![](writeupfiles/googleserch.png)
 
 I Google searched the chest board location to see if we can find an image of a chest board
 
-<image>
+![](writeupfiles/location.png)
 
 I found this image:
 
-<image>
+![](writeupfiles/board2.png)
 
 the chestboard piece of paper shows the king performing a very similar move to the queen. That should mean:
 p = pawn
 k2 - k4 = move king position 2 to position 4
 
-<image>
+![](writeupfiles/board.png)
 
 That should give us a string: p/k2-k4!
 Lets try unzipping it using p/k2-k4! as the password:
 
-<image>
+![](writeupfiles/flag.png)
 
 It worked, we got the flag! TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}
