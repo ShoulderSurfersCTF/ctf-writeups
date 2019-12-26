@@ -25,7 +25,7 @@ The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
 | Quack         | Reversing     | 400           |               |             
 | QuackQuack    | Reversing     | 600           |               | 
 | WANTED        | Stego         | 425           | TMHC{Th1sIsY0u1sntIt} 
-| HelpSomeoneIsTryingToBeMe| OSINT        | 225 |               | 
+| HelpSomeoneIsTryingToBeMe| OSINT        | 225 |TMHC{Y0u_F0uNd_My_S3cR3t_1ts_StU}|
 | quoted        | Mobile        | 400           |               | 
 
 
@@ -180,3 +180,12 @@ Lets try unzipping it using p/k2-k4! as the password:
 ![](writeupfiles/flag.png)
 
 It worked, we got the flag! TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}
+
+## HelpSomeoneIsTryingToBeMe
+
+This OSINT challenge is an easy one. The concept of the challenge is looking into messages sent in collaboration platforms. It ends with decoding a Estoteric language to get the flag.
+
+# The Challenge:
+
+So one of the owners of TMHC Dave @Dav is having an identity crisis, can you find the fake account and their secret? You’ll need to join TMHC discord to start this challenge. https://discord.gg/infosec
+By clicking the Discord link, you will be directed to The Many Hats Club CTF discord server. Prior to this CTF, I am already a member of the Discord. I then searched for the string “dav” and it seems that there are 3 users with Dav on their name and handle.
