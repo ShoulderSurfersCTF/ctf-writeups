@@ -20,12 +20,16 @@ using **Gimp**, which has "Whirl and Pinch" distortion under Filters ->
 Distorts.
 
 This is the original image:  
-![wanted](file://media/836536430.jpeg)
+![](writeupfiles/wanted.jpg)
 
 We can start by making a selection around the affected portion of the image by using the ellipse select tool.  
-![qownnotes-media-OCGhwN](file://media/1314997989.png)  
-![qownnotes-media-JbQYQo](file://media/946288993.png)
+![](writeupfiles/selection.png) 
+![](writeupfiles/Editing.png)
+
 
 The trial and error comes into play now.  I'm not sure if the image is fully recoverable, but image needs to be focused on in sections rather than trying to undo the image as a whole.  When I first started working on the image I used a negative swirl to undo most of the outter edges and slowly worked my way to the center.  Depending on your selection of the image your settings of the tool may vary, but the end result is the same.  Below is an example of my selection and tool settings to get a large part of the image visible.  Some guess work was required to get the correct characters for the flag.  
 Once a section of the image was where I needed it to be I created a new layer with that selection and locked it so it could not be altered by further use of the Whirl tool.  Unfortunately I no longer have my final version of the image, but this is a close version of it.    
-![qownnotes-media-IeIxRi](file://media/1443785752.png)
+![](writeupfiles/somewhat_readable.png)
+
+After a bit of guesswork, we come to the conclusion the flag is:
+TMHC{Th1sIsY0u1sntIt}
