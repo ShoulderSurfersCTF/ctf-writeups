@@ -20,8 +20,8 @@ The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
 | miniPWN       | Pwn           | 200           |               | 
 | overdosed     | Pwn           | 150           |               |
 | w00ter        | Pwn           | 600           |               |             
-| Operation     | Reversing     | 100           |               | 
-| DeNuevo       | Reversing     | 125           |               |
+| Operation     | Reversing     | 100           | TMHC{b1tWi5e_0pEr4tiOns}               | 
+| DeNuevo       | Reversing     | 125           | TMHC{5yjzx3d265gb7j}               |
 | Quack         | Reversing     | 400           |               |             
 | QuackQuack    | Reversing     | 600           |               | 
 | WANTED        | Stego         | 425           | TMHC{Th1sIsY0u1sntIt} 
@@ -120,8 +120,15 @@ Bingo! We input "1587926887" as our winning number and get our prize :)
     Enter your lottery number: 1587926887
     WOW! YOU WON THE LOTTERY!! GET YOUR REWARD WITH THE CODE 'TMHC{Lucki3r_th4n_Pelayo}'!!!1!11!
     
+## DESk - Category: Misc
+TL;DR:
+- Looked at the image noticed it was a chess move.
+- Recently I knew of a weird chess/Linux related thing where Ken Thompsons password was cracked
+- Googled for that, found his password `p/q2-q4!`
+- Looked at the supplied image to see that the pawn in front of the king is moving from 2-4 
+- Extrapolating that to mean this password is `p/k2-k4!`
+- Unzip using the password and get the flag
 
-## DESk
 DESk was a fun challenge with a bit of Google searching and history involved.
 
 ![](writeupfiles/desk.png)
@@ -179,7 +186,8 @@ Lets try unzipping it using p/k2-k4! as the password:
 
 ![](writeupfiles/flag.png)
 
-It worked, we got the flag! TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}
+It worked, we got the flag!
+    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`
 
 ## HelpSomeoneIsTryingToBeMe
 
@@ -333,18 +341,6 @@ and we have the flag:
 
     `TMHC{}`   
 
-## DESk - Category: Misc
-
-- Looked at the image noticed it was a chess move.
-- Recently I knew of a weird chess/Linux related thing where Ken Thompsons password was cracked
-- Googled for that, found his password `p/q2-q4!`
-- Looked at the supplied image to see that the pawn in front of the king is moving from 2-4 
-- Extrapolating that to mean this password is `p/k2-k4!`
-- Unzip using the password and get the flag
-
-
-    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`
-    
 ## Beeeep_Beeeep - Category: Misc
 
 - Listened to the audio and recognised it as a video from SmarterEveryDay
