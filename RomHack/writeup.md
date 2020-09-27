@@ -7,20 +7,26 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 
  Title          | Category      | Points        | Flag         |
 | ------------- | ------------- | ------------- | ------------- |
-| Warmup       | Warmup           | 300           |  HTB{L3t_The_G4mes_Beg!n}             |             
-| Saturn - User       | Fullpwn           | 400           |  16a937efbfd2498109579fc0f8b60253             |
-| Saturn - Root | Fullpwn           | 125           | 613d0a8b84f894ce93efcc2e4b2f2779
+| Warmup       | Warmup           | 25           |  HTB{L3t_The_G4mes_Beg!n}             |             
+| Saturn - User       | Fullpwn           | 1000           |  16a937efbfd2498109579fc0f8b60253             |
+| Saturn - Root | Fullpwn           | 1000           | 613d0a8b84f894ce93efcc2e4b2f2779
 | BonechewerCon     | Web        | 1000           |          
 | 🤔 todo or not todo 🤔| Web        | 1000           |               | 
-| ebirthday | Pwn| 100           |               |
-| confused chromium | Pwn| 100           |               |
-| Air Traffic Control          | Pwn          | 125           |              
-| Final Space: The Abduction | Crypto          | 175           | 
+| ebirthday | Pwn| 1000           |               |
+| confused chromium | Pwn| 1000           |               |
+| Air Traffic Control          | Crypto          | 1000           |              
+| Final Space: The Abduction | Crypto          | 1000           | 
 | HandsomeWare    | Reversing          | 1000           |               |
-| Phish in a Barrel       | Forensics           | 200           |               | 
+| Phish in a Barrel       | Forensics           | 1000           |               | 
 | Offline        | Hardware        | 1000           |               | 
 
+# Warmup
 
+```
+First Step: HTB{L3t_The_G4mes_Beg!n}
+```
+
+![](writeupfiles/Untitled 08.png)
 
 # Saturn - User
 
