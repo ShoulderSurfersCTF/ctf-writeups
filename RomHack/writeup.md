@@ -47,11 +47,11 @@ PORT     STATE SERVICE
 
 As always, the web ports are always checked first. We see a search field
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled.png)
+![](writeupfiles/Untitled.png)
 
 Doing a basic search gives us a query in the URI
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%201.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%201.png)
+![](writeupfiles/Untitled%201.png)
 
 Upon not finding anything else that was exploitable, we fuzzed the query for Local File Inclusion (LFI) vulnerabilities
 
@@ -97,13 +97,13 @@ Some basic LFI vulnerable paths were returned.
 
 Using the Wappalyzer FireFox addon, we discover that the server is running Windows Server
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%202.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%202.png)
+![](writeupfiles/Untitled%202.png)
 
 After not being able to read any files on the server such as `/etc/hosts` or `win.ini`, we attempted a Remote File Inclusion (RFI) vulnerability.
 
 We tried to load `test.txt` by navigating to our smbserver we had setup. A simple RFI vulnerability
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%203.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%203.png)
+![](writeupfiles/Untitled%203.png)
 
 We were able to get a hit on our `smbserver.py`, but no files were able to load via the web browser. We do however see a user and hash presented to us.
 
@@ -218,7 +218,7 @@ Hashcat was then used to try crack the hash
 hashcat -m 110 jupiter.hash passwords.txt
 ```
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%204.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%204.png)
+![](writeupfiles/Untitled%204.png)
 
 The cracked password was: `ak1je3Bai8noo9soo3fo` as shown above.
 
@@ -231,7 +231,7 @@ from subprocess import getoutput
 getoutput("whoami")
 ```
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%205.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%205.png)
+![](writeupfiles/Untitled%205.png)
 
 After a short amount of time, we turned RCE into a reverse shell by utilizing the below code
 
@@ -270,7 +270,7 @@ except KeyboardInterrupt:
 
 A `nc` was setup and this landed us a user shell as the jupiter user
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%206.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%206.png)
+![](writeupfiles/Untitled%206.png)
 
 The user flag was obtained and submitted
 
@@ -353,4 +353,4 @@ We were able to brute-force the SIDs to obtain the users of the box before getti
 
 The Search field was also vulnerable to XSS
 
-![RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%207.png](RomHack%200f35094233a34d5e966dd5116e24b201/Untitled%207.png)
+![](writeupfiles/Untitled%207.png)
