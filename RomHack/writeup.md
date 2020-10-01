@@ -17,7 +17,7 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 | Air Traffic Control          | Crypto          | 1000           |              
 | Final Space: The Abduction | Crypto          | 1000           | 
 | HandsomeWare    | Reversing          | 1000           |               |
-| Phish in a Barrel       | Forensics           | 1000           |               | 
+| Phish in a Barrel       | Forensics           | 1000           |   HTB{mo4R_0bfu$c4t1on_n3xt_t1m3_pl34s3}            | 
 | Offline        | Hardware        | 1000           |               | 
 
 # Warmup
@@ -424,6 +424,6 @@ Focusing on the the longest base64 encoded string and decoding it, I can get the
 flag: HTB{mo4R_0bfu$c4t1on_n3xt_t1m3_pl34s3}
 ```
 
-I think I was the first one to solve this challenge lol.
+I was the first one to solve this challenge too.
 
 ![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png)
