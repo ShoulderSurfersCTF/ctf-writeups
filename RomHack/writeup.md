@@ -360,3 +360,70 @@ We were able to brute-force the SIDs to obtain the users of the box before getti
 The Search field was also vulnerable to XSS
 
 ![](writeupfiles/Untitled%207.png)
+
+---
+
+# Forensics Writeup-RomHack
+
+Created By: Christian Villapando
+Last Edited: Sep 30, 2020 9:50 PM
+
+This is a writeup on how I solved the only Forensic challenge which in the recent RomHack 2020 CTF.
+
+## Challenge
+
+We are given a zip file, which contains  a document inside called PhishInABarrel.doc. I tried running strings but nothing that interesting was found in the result. I was able to determine that are obfuscated strings inside the doc using olevba. 
+
+```bash
+olevba PhishInaABarrel.doc
+```
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled.png)
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%201.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%201.png)
+
+Seeing that there are interesting Keywords and obfuscated data, I used olevba to deobfuscate and saved the output to json format.
+
+```bash
+olevba --deobf PhishInABarrel.doc --json | tee json.out
+```
+
+I then used jq to filter out the data I wanted, focusing on "analysis".
+
+```bash
+cat json.out | jq -r '.[]|.analysis' | tee json2.out
+```
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%202.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%202.png)
+
+Since I am interested in the base64 data, I further parsed it to extract the values in the key "keyword".
+
+```bash
+cat json2.out | jq -r '.[]|.keyword'
+```
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup2.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup2.png)
+
+I then saved it to a file, and base64 decoded it. 
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup3.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup3.png)
+
+I then used [PSDecode](https://github.com/R3MRUM/PSDecode) to decode it. From the output, it is interesting to see that the strings "3GI" appears numerous times.
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%203.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%203.png)
+
+I then removed all "3GI" characters(just intu
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup4.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup4.png)
+
+Focusing on the the longest base64 encoded string and decoding it, I can get the flag.
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup5.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup5.png)
+
+```bash
+flag: HTB{mo4R_0bfu$c4t1on_n3xt_t1m3_pl34s3}
+```
+
+I think I was the first one to solve this challenge lol.
+
+![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png)
