@@ -378,9 +378,9 @@ We are given a zip file, which contains  a document inside called PhishInABarrel
 olevba PhishInaABarrel.doc
 ```
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled.png)
+![](writeupfiles/Untitled.png)
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%201.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%201.png)
+![](writeupfiles/Untitled201.png)
 
 Seeing that there are interesting Keywords and obfuscated data, I used olevba to deobfuscate and saved the output to json format.
 
@@ -394,7 +394,7 @@ I then used jq to filter out the data I wanted, focusing on "analysis".
 cat json.out | jq -r '.[]|.analysis' | tee json2.out
 ```
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%202.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%202.png)
+![](writeupfiles/Untitled202.png)
 
 Since I am interested in the base64 data, I further parsed it to extract the values in the key "keyword".
 
@@ -402,23 +402,23 @@ Since I am interested in the base64 data, I further parsed it to extract the val
 cat json2.out | jq -r '.[]|.keyword'
 ```
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup2.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup2.png)
+![](writeupfiles/Untitled203.png)
 
 I then saved it to a file, and base64 decoded it. 
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup3.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup3.png)
+![](writeupfiles/Untitled204.png)
 
 I then used [PSDecode](https://github.com/R3MRUM/PSDecode) to decode it. From the output, it is interesting to see that the strings "3GI" appears numerous times.
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%203.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/Untitled%203.png)
+![](writeupfiles/Untitled205.png)
 
 I then removed all "3GI" characters(just intu
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup4.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup4.png)
+![](writeupfiles/Untitled206.png)
 
 Focusing on the the longest base64 encoded string and decoding it, I can get the flag.
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup5.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/writeup5.png)
+![](writeupfiles/Untitled207.png)
 
 ```bash
 flag: HTB{mo4R_0bfu$c4t1on_n3xt_t1m3_pl34s3}
@@ -426,4 +426,4 @@ flag: HTB{mo4R_0bfu$c4t1on_n3xt_t1m3_pl34s3}
 
 I was the first one to solve this challenge too.
 
-![Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png](Forensics%20Writeup-RomHacka%203ed2d9aaf32c44c38a3bb0e07dc509e4/1st.png)
+![](writeupfiles/Untitled208.png)
