@@ -28,12 +28,13 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 First Step: HTB{L3t_The_G4mes_Beg!n}
 ```
 
+##
+
 # Saturn - User
 
-##
 Created By: sinfulz (Solved by: sinfulz, sif0 & S1ckB0y)
 
-Last Edited: Oct 09, 2020 7:44PM AEDT
+Last Edited: Oct 09, 2020 7:45PM AEDT
 
 The challenge consisted of 3 IPs which all were the same type of machines.
 
@@ -372,7 +373,7 @@ The Search field was also vulnerable to XSS
 
 Created By: Christian Villapando
 
-Last Edited: Oct 09, 2020 7:44PM AEDT
+Last Edited: Oct 09, 2020 7:45PM AEDT
 
 This is a writeup on how I solved the only Forensic challenge which was in the recent RomHack 2020 CTF.
 
