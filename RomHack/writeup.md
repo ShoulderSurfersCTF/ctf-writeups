@@ -30,6 +30,11 @@ First Step: HTB{L3t_The_G4mes_Beg!n}
 
 # Saturn - User
 
+##
+Created By: sinfulz (Solved by: sinfulz, sif0 & S1ckB0y)
+
+Last Edited: Oct 09, 2020 7:44PM AEDT
+
 The challenge consisted of 3 IPs which all were the same type of machines.
 
 10.10.10.93, 10.10.10.103 & 10.10.10.123.
@@ -367,11 +372,11 @@ The Search field was also vulnerable to XSS
 
 Created By: Christian Villapando
 
-Last Edited: Oct 09, 2020 7:41PM AEDT
+Last Edited: Oct 09, 2020 7:44PM AEDT
 
 This is a writeup on how I solved the only Forensic challenge which was in the recent RomHack 2020 CTF.
 
-## Challenge
+##
 
 We are given a zip file, which contains  a document inside called PhishInABarrel.doc. I tried running strings but nothing that interesting was found in the result. I was able to determine that are obfuscated strings inside the doc using olevba. 
 
