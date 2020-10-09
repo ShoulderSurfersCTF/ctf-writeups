@@ -22,11 +22,11 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 
 # Warmup
 
+![](writeupfiles/Untitled008.png)
+
 ```
 First Step: HTB{L3t_The_G4mes_Beg!n}
 ```
-
-![](writeupfiles/Untitled008.png)
 
 # Saturn - User
 
@@ -366,9 +366,10 @@ The Search field was also vulnerable to XSS
 # Forensics Writeup-RomHack
 
 Created By: Christian Villapando
-Last Edited: Sep 30, 2020 9:50 PM
 
-This is a writeup on how I solved the only Forensic challenge which in the recent RomHack 2020 CTF.
+Last Edited: Oct 09, 2020 7:41PM AEDT
+
+This is a writeup on how I solved the only Forensic challenge which was in the recent RomHack 2020 CTF.
 
 ## Challenge
 
@@ -412,7 +413,7 @@ I then used [PSDecode](https://github.com/R3MRUM/PSDecode) to decode it. From th
 
 ![](writeupfiles/Untitled205.png)
 
-I then removed all "3GI" characters(just an intuition)
+I then removed all "3GI" characters (just an intuition)
 
 ![](writeupfiles/Untitled206.png)
 
