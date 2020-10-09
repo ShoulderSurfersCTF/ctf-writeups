@@ -412,7 +412,7 @@ I then used [PSDecode](https://github.com/R3MRUM/PSDecode) to decode it. From th
 
 ![](writeupfiles/Untitled205.png)
 
-I then removed all "3GI" characters(just intu
+I then removed all "3GI" characters(just an intuition)
 
 ![](writeupfiles/Untitled206.png)
 
