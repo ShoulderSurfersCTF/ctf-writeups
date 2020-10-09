@@ -26,7 +26,7 @@ The CTF was active from 26 Sep, 2020 17:00 until 27 Sep, 2020 05:00.
 First Step: HTB{L3t_The_G4mes_Beg!n}
 ```
 
-![](writeupfiles/Untitled 08.png)
+![](writeupfiles/Untitled%08.png)
 
 # Saturn - User
 
