@@ -416,3 +416,208 @@ p.interactive()                             # flag
 ```
 CHTB{d3struct0r5_m1n3f13ld}
 ```
+
+# Crypto
+
+##
+
+## Nintendo Base64
+
+Solved By: ?
+
+##
+
+## PhaseStream 1
+
+Solved By: ?
+
+##
+
+## PhaseStream 2
+
+Solved By: Legacyy
+
+```python
+with open("phasestream2_output.txt", "r") as f:
+    lines = f.read().split("\n")
+
+for i in range(0, len(lines)):
+    lines[i] = bytearray.fromhex(lines[i])
+
+found = False
+for i in range(1, 256):
+    for line in lines:
+        res = ""
+        for char in line:
+            res += chr(char ^ i)
+        if "HTB{" in res:
+            found = True
+            break
+    if found:
+        break
+
+print(res)
+```
+
+flag:
+```
+CHTB{}
+```
+
+##
+
+## PhaseStream 3
+
+Solved By: Legacyy
+
+```python
+with open("./phasestream3_output.txt", "r") as f:
+    out = f.read().split("\n")
+    quote_out = bytearray.fromhex(out[0])
+    flag_out = bytearray.fromhex(out[1])
+    del out
+
+quote = b"No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented."
+
+key = b""
+for i in range(0, 23):
+    key += bytes([quote_out[i] ^ quote[i]])
+
+flag = b""
+for i in range(0, 23):
+    flag += bytes([key[i] ^ flag_out[i]])
+
+print(flag.decode('latin1'))
+```
+
+flag:
+```
+CHTB{}
+```
+
+##
+
+## SoulCrabber
+
+Solved By: Legacyy
+
+We can take the source rust file and make a few modifications to allow us to easily get test outputs within the console...
+Use this site if you dont wanna install rust
+
+*[https://play.rust-lang.org/](https://play.rust-lang.org/)*
+
+```python
+use rand::{Rng,SeedableRng};
+use rand::rngs::StdRng;
+
+fn get_rng() -> StdRng {
+    let seed = 13371337;
+    return StdRng::seed_from_u64(seed);
+}
+
+fn rand_xor(input : String) -> String {
+    let mut rng = get_rng();
+    return input
+        .chars()
+        .into_iter()
+        .map(|c| format!("{:02x}", (c as u8 ^ rng.gen::<u8>())))
+        .collect::<Vec<String>>()
+        .join("");
+}
+
+fn main() -> std::io::Result<()> {
+    let flag = String::from("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    let xored = rand_xor(flag);
+    println!("{}", xored);
+    Ok(())
+}
+```
+
+We can then xor the output `19500187e1ba0b5bf3e27914c83f1ffd67123543ffc3ae4a4d22a9d54f2a5a832354a1c67cec35d50f3dd9a58e496f0f800e358bae` with our `A`'s and get the xor key, this is consistent between runs due to having a constant seed.
+
+This gives us a key of `581140c6a0fb4a1ab2a33855897e5ebc26537402be82ef0b0c63e8940e6b1bc26215e0873dad74944e7c98e4cf082e4ec14f74caef which we can xor with 1b591484db962f7782d1410afa4a388f7930067bcef6df546a57d9f873` to get the flag!
+
+```
+CHTB{mem0ry_s4f3_crypt0_f41l}
+```
+
+##
+
+## PhaseStream 4
+
+Solved By: bread
+
+AES-CTR is vulnerable to plaintext. Both encrypted texts use the same key.
+
+Since we know that the flag will contain `CTHB{` we can XOR that against the start of the encrypted flag and get part of the key, Then, we use that to get the start of the quote.
+
+We start with:
+
+`2767868b7e`
+
+XOR
+
+`CHTB{`
+
+=
+
+`642fd2c905`
+
+XOR
+
+`2d0fb3a56a`
+
+=
+
+`I alon`
+
+So, if we google for " `I alon`" (and i guessed it was "I alone quote") we find Mother Teresa.
+
+`2d0fb3a56aa66e1e44cffc97f3a2e030feab144124e73c76d5d22f6ce01c46e73a50b0edc1a2bd243f9578b745438b00720870e3118194cbb438149e3cc9c0844d640ecdb1e71754c24bf43bf3fd0f9719f74c7179b6816e687fa576abad1955`
+
+XOR
+
+`I alone cannot change the world, but I can cast a stone across the waters to create many ripples.`
+
+=
+
+`642fd2c905c80b3e27ae92f99cd6c05396ca7a2641c7481eb0f25803927022cb1a32c599e1eb9d475efb58d42430ff20132803977eeff1ebd55b66f14fbae0f025012ebad0937226b16b8054d39e7df27883295114d7ef17480dcc06dbc17c26`
+
+XOR
+
+`2767868b7ebb7f4c42cfffa6ffbfb03bf3b8097936ae3c76ef803d76e11546947157bcea9599f826338807b55655a05666446df20c8e9387b004129e10d18e9f526f71cabcf21b48965ae36fcfee1e820cf1076f65`
+
+=
+`CHTB{stream_ciphers_with_reused_keystreams_are_Vulnerable_to_known_plain'1c;pcptr.>q`
+
+Which is close enough to guess the remaining flag:
+
+```
+CHTB{stream_ciphers_with_reused_keystreams_are_vulnerable_to_known_plaintext_attacks}
+```
+
+##
+
+## RSA jam
+
+Solved By: Legacyy & payl0ad
+
+# Reversing
+
+##
+
+## Authenticator
+
+Solved By: bread
+
+##
+
+## Passphrase
+
+Solved By: bread
+
+##
+
+## Backdoor
+
+Solved By: bread
