@@ -621,3 +621,119 @@ Solved By: bread
 ## Backdoor
 
 Solved By: bread
+
+# Forensics
+
+##
+
+## Oldest trick in the book
+
+Solved By: payl0ad
+
+##
+
+## Key mission
+
+Solved By: bread
+
+I googled 'usb keystrokes CTF' and found [https://blog.stayontarget.org/2019/03/decoding-mixed-case-usb-keystrokes-from.html](https://blog.stayontarget.org/2019/03/decoding-mixed-case-usb-keystrokes-from.html)
+
+But, this isnt 'left over data', so i changed the 'extraction' step to:
+
+```bash
+tshark -r key_mission.pcap -V | grep "HID Data" | cut -d\   -f3 > test
+python3 solver.py test
+I aam ssendinfdeldelg ssecrretary's loccation oveer this tottally encrypted channel to make surre no one elsse will be able to  rreeatdeldeld itt exceppt of us. Tthis informmaation iss confiddential and must not be sharred with anyone elsse. Tthe  ssecrretary's hidden looccation is CHTB{a_place=3deldel-3deldel_3deldeldel3_fAr_fAar_awway_ffr0m_eearth}Enter
+```
+
+I did the manual dels
+`CHTB{a_place3_fAr_fAar_awway_ffr0m_eearth}`
+Although, it was still wrong so I cleaned the flag up abit and the below flag was correct:
+`CHTB{a_place3_fAr_fAr_awway_ffr0m_eearth}`
+
+##
+
+## Invitation
+
+Solved By: Fugl
+
+I found an online tool to decompile macros in word.
+
+I then replaced all string variables with "first", "second", "......... so forth for ease of working. 
+
+I then made more string modifications to get one big chunk of hex for each string. 
+
+I ran it through cyberchef with decode_16LE(from_base64(from_hex(code))) and stitched together each variable. 
+
+Powershell code then appeared.
+
+I then ran the non-payload parts, and I got the flag in two chunks:
+```powershell
+PS C:\Users\Birb\Desktop> get-item -Path "HKCU:\Software\$($regp)" | fl
+
+[...]
+PSChildName   : CHTB{maldocs_are
+[...]
+
+PS C:\Users\Birb\Desktop> $($regn)
+_the_new_meta}
+```
+
+Putting the flag together:
+```CHTB{maldocs_are_the_new_meta}```
+
+##
+
+## AlienPhish
+
+Solved By: Fugl
+
+1. Run file through app.any.run ( [https://any.run/report/00abacd6fe8f37d21983c84c0fceb9bf56af8b2ab39a19798b7f773c8d032db0/c25bfa2e-4b55-48f9-9f9f-39f1319c09ea#registry](https://any.run/report/00abacd6fe8f37d21983c84c0fceb9bf56af8b2ab39a19798b7f773c8d032db0/c25bfa2e-4b55-48f9-9f9f-39f1319c09ea#registry) and look at the exe name the final powershell process tries to write to. 
+2. The filename is the flag:
+Q0hUQntwSDFzSGlOZ193MF9tNGNyMHM_Pz99  -->  Base64 decode (alphabet (important!!): A-Za-z0-9-_
+
+The flag was given as below.
+```CHTB{pH1sHiNg_w0_m4cr0s???}```
+
+##
+
+## Low Energy Crypto
+
+Solved By: Fugl & Legacyy
+
+From the dump we locate and find the public key and what looks to be an encrypted reply:
+```bash
+-----BEGIN PUBLIC KEY-----
+MGowDQYJKoZIhvcNAQEBBQADWQAwVgJBAKKPHxnmkWVC4fje7KMbWZf07zR10D0m
+B9fjj4tlGkPOW+f8JGzgYJRWboekcnZfiQrLRhA3REn1lUKkRAnUqAkCEQDL/3Li
+4l+RI2g0FqJvf3ff
+-----END PUBLIC KEY-----
+
+
+0000   39 29 69 b0 18 ff a0 93 b9 ab 5e 45 ba 86 b4 aa
+0010   07 0e 78 b8 39 ab f1 13 77 e7 83 62 6d 7f 9c 40
+0020   91 39 2a ef 8e 13 ae 9a 22 84 42 88 e2 d2 7f 63
+0030   d2 eb d0 fb 90 87 10 16 fd e8 70 77 d5 0a e5 38
+0040   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0050   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0060   00 00 00 00 00
+```
+
+Legacyy then did some Python voodoo and we got the below:
+```python
+from Crypto.Util.number import long_to_bytes
+p = 92270847179792937622745249326651258492889546364106258880217519938223418249279
+q = 92270847179792937622745249326651258492889546364106258880217519938223418258871
+n = p * q
+e = 271159649013582993327688821275872950239
+phi = (p - 1) * (q - 1)
+d = pow(e, -1, phi)
+
+ct = 0x392969b018ffa093b9ab5e45ba86b4aa070e78b839abf11377e783626d7f9c4091392aef8e13ae9a22844288e2d27f63d2ebd0fb90871016fde87077d50ae538
+pt = pow(ct, d, n)
+
+print(long_to_bytes(pt))
+```
+
+Which gave us the flag:
+```CHTB{5p34k_fr13nd_4nd_3n73r}```
