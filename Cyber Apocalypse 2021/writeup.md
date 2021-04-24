@@ -1,5 +1,6 @@
 # Cyber Apocalypse 2021
 The CTF was active from 19 Apr, 2021 22:00 until 24 Apr, 2021 08:00.
+
 Participants: sinfulz, Fugl, Legacyy, Pwning, payl0ad, x3ph, bread, firedank.
 
 ![](writeupfiles/ctfscore.png)
