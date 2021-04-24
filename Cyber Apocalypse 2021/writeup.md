@@ -82,7 +82,7 @@ Solved By: pwning
 
 ## DaaS
 
-Solved By: FireHawk
+Solved By: firedank
 
 We see that the server is running laravel. We also get a hint in the challenge in the info that the page is running in debug mode
 If we search for some recent laravel exploits we find this blog post:
@@ -608,19 +608,19 @@ Solved By: Legacyy & payl0ad
 
 ## Authenticator
 
-Solved By: bread
+Solved By: Legacyy
 
 ##
 
 ## Passphrase
 
-Solved By: bread
+Solved By: Legacyy
 
 ##
 
 ## Backdoor
 
-Solved By: bread
+Solved By: firedank
 
 # Forensics
 
@@ -737,3 +737,96 @@ print(long_to_bytes(pt))
 
 Which gave us the flag:
 ```CHTB{5p34k_fr13nd_4nd_3n73r}```
+
+# Hardware
+
+##
+
+## Serial Logs
+
+Solved By: Fugl
+
+Load the capture file into Logic 2. From the hints in the challenge we suppose it is serial and NFC (access control and IoT suggests NFC). We look up the bitrate for NFC which starts at 125 kbits, and key that in. Doing so we get:
+
+```bash
+[...]
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[ERR] Noise detected in channel. Swithcing baud to backup value
+\xCE\xF2p\xBE\xCC>\xBC\xBE>|@~<\xCE|\xBE\xC2\xB....................
+```
+
+The baud is then changed according to the log in preparation for backing up. Using the standard baud rates found at [https://en.wikipedia.org/wiki/Serial_port#Speed](https://en.wikipedia.org/wiki/Serial_port#Speed) we try 76800 after a few failed attempts and get:
+
+```bash
+[...]
+[LOG] Connection from b1759332e4b7bc6b14b7b12b90d350f811144180e2129bdd313b85b1ee15e6b1
+[LOG] Connection from ab290d3a380f04c2f0db98f42d5b7adea2bd0723fa38e0621fb3d7c1c2808284
+[LOG] Connection from a7e6ec5bb39a554e97143d19d3bfa28a9bbef68fa6ecab3b3ef33919547278d4
+[LOG] Connection from 099319f700d8d5f287387c81e6f20384c368a9de27f992f71c1de363c597afd4
+[LOG] Connection from ab290d3a380f04c2f0db98f42d5b7adea2bd0723fa38e0621fb3d7c1c2808284
+[LOG] Connection from CHTB{wh47?!_f23qu3ncy_h0pp1n9_1n_4_532141_p2070c01?!!!52}
+[LOG] Connection from CHTB{wh47?!_f23qu3ncy_h0pp1n9_1n_4_532141_p2070c01?!!!52}
+```
+
+The above logs contain the flag: ```CHTB{wh47?!_f23qu3ncy_h0pp1n9_1n_4_532141_p2070c01?!!!52}```
+
+##
+
+## Compromised
+
+Solved By: Fugl
+
+![](writeupfiles/Compromised.png)
+
+We are told by the challenge tip that this is a serial network with multiple slaves. Notice the highlighted lines in the picture showing the slave transferring the flag (as we soon will discover) and another slave doing its own thing (0x2C and 0x34 respectively). If we grab the output and look at the bytes only sent to 0x2C, we get:
+
+```bash
+0x43 0x48 0x54 0x42 0x7B 0x6E 0x75 0x31 0x31 0x5F0x37 0x33 0x32 0x6D 0x31 0x6E 0x34 0x37 0x30 0x32 0x35 0x5F 0x63 0x34 0x6E 0x5F 0x38 0x32 0x33 0x34 0x6B 0x5F 0x34 0x5F 0x35 0x33 0x32 0x31 0x34 0x31 0x5F 0x35 0x79 0x35 0x37 0x33 0x6D 0x21 0x40 0x35 0x32 0x29 0x23 0x40 0x25 0x7D
+```
+
+which translates to the flag:
+
+```
+CHTB{nu11_732m1n47025_c4n_8234k_4_532141_5y573m!@52)#@%}
+```
+
+##
+
+## Secure
+
+Solved By: Fugl
+
+We are told to read MicroSD data so I start Googling how to do that and find
+
+[https://support.saleae.com/tutorials/example-projects/how-to-analyze-spi](https://support.saleae.com/tutorials/example-projects/how-to-analyze-spi)
+
+which shows an example setup. Turns out SPI is just what we need. SPI is Serial Peripheral Interface which is "is a communication protocol often used between processors and devices that require a relatively fast interface, such as shift registers, **flash memory**, and some sensors.".
+
+So we set up Logic 2 to read the capture with an SPI analyzer setting channels 0 and 1 as MISO and MOSI, channel 3 as Enable and channel 4 as clock. This gives output along the lines of:
+
+```bash
+0xFF/0xFF 0x40/0xFF 0x00/0xFF 0x00/0xFF 0x00/0xFF 0x00/0xFF 0x95/0xFF 0xFF/0xFF 0xFF/0x01 0xFF/0xFF 0x48/0xFF 0x00/0xFF 0x00/0xFF 0x01/0xFF 0xAA/0xFF 0x87/0xFF 0xFF/0xFF 0xFF/0x01 0xFF/0x00 0xFF/0x00 0xFF/0x01 0xFF/0xAA 0xFF/0xFF 0x77/0xFF 0x00/0xFF 0x00/0xFF 0x00/0xFF 0x00/0xFF 0xFF/0xFF 0xFF/0xFF 0xFF/0x01 0xFF/0xFF 0x69/0xFF 0x40/0xFF 0x00/0xFF ........
+```
+
+Saving that output in a text file and using a small Python script
+
+```python
+for pair in open('secure.txt').read().split(' '):
+   print(pair.split('/')[0], end='')  # change to pair.split('/')[1] for MOSI
+```
+
+we print the raw data and read the output From Hex to ASCII. Reading MOSI we get:
+
+```bash
+[...]
+....¨rPrP...¨rP......å..f.s.e.v...Úe.n.t.s.d.....ÿÿÿÿåSEVEN~1   ..d¦vxPxP..¦vxP......å0      TXT .Âõ.sP6R..8®sP......A.._.1.0.....ít.x.t...ÿÿÿÿ..ÿÿÿÿ2.ÿÿÿÿÿÿÿÿ.ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿþCHTB{5P1_15_c0mm0n_0n_m3m02y_d3v1c35_!@52}
+[...]
+```
+
+where we see the flag at the end of this dump:
+
+```
+CHTB{5P1_15_c0mm0n_0n_m3m02y_d3v1c35_!@52}
+```
