@@ -88,7 +88,7 @@ which looks like to be the end of the flag `us3full_1nf0rm4tion}`
 The last portion of the flag was found in the main.css (`http://138.68.182.108:30222/static/css/main.css`)
 c4n_r3ve4l_
 
-After collection all the portions of the flag, we get the flag: `CHTB{1nsp3ction_c4n_r3ve4l_us3full_1nf0rm4tion}`
+After collecting all the portions of the flag, we get the flag: `CHTB{1nsp3ction_c4n_r3ve4l_us3full_1nf0rm4tion}`
 
 ##
 
